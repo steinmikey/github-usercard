@@ -6,10 +6,15 @@ import axios from "axios"; // why did I have to add this for axios to be defined
     https://api.github.com/users/<your name>
 */
 
-axios
+const cards = document.querySelector(".cards");
+
+const gitAPI = axios
   .get("https://api.github.com/users/steinmikey")
   .then((res) => {
-    console.log(res);
+    // console.log(res);
+    // console.log(res.data);
+    const user = addUser(res.data);
+    cards.appendChild(user);
   })
   .catch((err) => console.error(err));
 
@@ -25,6 +30,8 @@ axios
   STEP 4: Pass the data received from Github into your function,
     and append the returned markup to the DOM as a child of .cards
 */
+
+// addUser(gitAPI);
 
 /*
   STEP 5: Now that you have your own card getting added to the DOM, either
@@ -60,31 +67,31 @@ const followersArray = [];
     </div>
 */
 
-function addUser(data) {
+function addUser({ name, login, location, html_url, followers, following, bio }) {
   //create elements
   const card = document.createElement("div");
   const userImage = document.createElement("img");
   const cardInfo = document.createElement("div");
   const userName = document.createElement("h3");
   const usersUsername = document.createElement("p");
-  const location = document.createElement("p");
+  const cLocation = document.createElement("p");
   const profile = document.createElement("p");
   const gitAddress = document.createElement("a");
-  const followers = document.createElement("p");
-  const following = document.createElement("p");
-  const bio = document.createElement("p");
+  const cFollowers = document.createElement("p");
+  const cFollowing = document.createElement("p");
+  const cBio = document.createElement("p");
 
   //create hierarchy
   card.appendChild(userImage);
   card.appendChild(cardInfo);
   cardInfo.appendChild(userName);
   cardInfo.appendChild(usersUsername);
-  cardInfo.appendChild(location);
+  cardInfo.appendChild(cLocation);
   cardInfo.appendChild(profile);
   profile.appendChild(gitAddress);
-  cardInfo.appendChild(followers);
-  cardInfo.appendChild(following);
-  cardInfo.appendChild(bio);
+  cardInfo.appendChild(cFollowers);
+  cardInfo.appendChild(cFollowing);
+  cardInfo.appendChild(cBio);
 
   //add classes
   card.classList.add("card");
@@ -93,13 +100,13 @@ function addUser(data) {
   usersUsername.classList.add("username");
 
   //assign text
-  userName.textContent = data.name;
-  usersUsername.textContent = data.login;
-  location.textContent = data.location;
-  gitAddress.textContent = data.html_url;
-  followers.textContent = data.followers;
-  following.textContent = data.following;
-  bio.textContent = data.bio;
+  userName.textContent = name;
+  usersUsername.textContent = login;
+  cLocation.textContent = location;
+  gitAddress.textContent = html_url;
+  cFollowers.textContent = followers;
+  cFollowing.textContent = following;
+  cBio.textContent = bio;
 
   return card;
 }
