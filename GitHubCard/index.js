@@ -8,16 +8,17 @@ import axios from "axios"; // why did I have to add this for axios to be defined
 
 const cards = document.querySelector(".cards");
 
-const gitAPI = axios
-  .get("https://api.github.com/users/steinmikey")
-  .then((res) => {
-    // console.log(res);
-    // console.log(res.data);
-    const user = addUser(res.data);
-    cards.appendChild(user);
-  })
-  .catch((err) => console.error(err));
-
+function addUser(username) {
+  const gitAPI = axios
+    .get(`https://api.github.com/users/${username}`)
+    .then((res) => {
+      // console.log(res);
+      console.log(res.data);
+      const user = addUserInfo(res.data);
+      cards.appendChild(user);
+    })
+    .catch((err) => console.error(err));
+}
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
     github info! You will need to understand the structure of this
@@ -31,8 +32,6 @@ const gitAPI = axios
     and append the returned markup to the DOM as a child of .cards
 */
 
-// addUser(gitAPI);
-
 /*
   STEP 5: Now that you have your own card getting added to the DOM, either
     follow this link in your browser https://api.github.com/users/<Your github name>/followers,
@@ -44,8 +43,11 @@ const gitAPI = axios
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
-//
+const followersArray = ["tetondan", "dustinmyers", "justsml", "luishrd", "bigknell"];
+
+followersArray.forEach((user) => {
+  addUser(user);
+});
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
@@ -67,7 +69,7 @@ const followersArray = [];
     </div>
 */
 
-function addUser({ name, login, location, html_url, followers, following, bio }) {
+function addUserInfo({ name, login, location, html_url, followers, following, bio, avatar_url }) {
   //create elements
   const card = document.createElement("div");
   const userImage = document.createElement("img");
@@ -107,6 +109,7 @@ function addUser({ name, login, location, html_url, followers, following, bio })
   cFollowers.textContent = followers;
   cFollowing.textContent = following;
   cBio.textContent = bio;
+  userImage.src = avatar_url;
 
   return card;
 }
