@@ -1,9 +1,24 @@
+import axios from "axios"; // why did I have to add this for axios to be defined?
+
 /*
   STEP 1: using axios, send a GET request to the following URL
     (replacing the placeholder with your Github name):
     https://api.github.com/users/<your name>
 */
 
+const cards = document.querySelector(".cards");
+
+function addUser(username) {
+  const gitAPI = axios
+    .get(`https://api.github.com/users/${username}`)
+    .then((res) => {
+      // console.log(res);
+      console.log(res.data);
+      const user = addUserInfo(res.data);
+      cards.appendChild(user);
+    })
+    .catch((err) => console.error(err));
+}
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
     github info! You will need to understand the structure of this
@@ -28,7 +43,11 @@
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = ["tetondan", "dustinmyers", "justsml", "luishrd", "bigknell"];
+
+followersArray.forEach((user) => {
+  addUser(user);
+});
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
@@ -49,6 +68,51 @@ const followersArray = [];
       </div>
     </div>
 */
+
+function addUserInfo({ name, login, location, html_url, followers, following, bio, avatar_url }) {
+  //create elements
+  const card = document.createElement("div");
+  const userImage = document.createElement("img");
+  const cardInfo = document.createElement("div");
+  const userName = document.createElement("h3");
+  const usersUsername = document.createElement("p");
+  const cLocation = document.createElement("p");
+  const profile = document.createElement("p");
+  const gitAddress = document.createElement("a");
+  const cFollowers = document.createElement("p");
+  const cFollowing = document.createElement("p");
+  const cBio = document.createElement("p");
+
+  //create hierarchy
+  card.appendChild(userImage);
+  card.appendChild(cardInfo);
+  cardInfo.appendChild(userName);
+  cardInfo.appendChild(usersUsername);
+  cardInfo.appendChild(cLocation);
+  cardInfo.appendChild(profile);
+  profile.appendChild(gitAddress);
+  cardInfo.appendChild(cFollowers);
+  cardInfo.appendChild(cFollowing);
+  cardInfo.appendChild(cBio);
+
+  //add classes
+  card.classList.add("card");
+  cardInfo.classList.add("card-info");
+  userName.classList.add("name");
+  usersUsername.classList.add("username");
+
+  //assign text
+  userName.textContent = name;
+  usersUsername.textContent = login;
+  cLocation.textContent = location;
+  gitAddress.textContent = html_url;
+  cFollowers.textContent = followers;
+  cFollowing.textContent = following;
+  cBio.textContent = bio;
+  userImage.src = avatar_url;
+
+  return card;
+}
 
 /*
   List of LS Instructors Github username's:
